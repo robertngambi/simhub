@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimHub - Multi-SIM MiFi Device Web</title>
+    <meta name="description" content="SimHub - Africa's first intelligent multi-SIM MiFi device. Dual SIM, 150m Wi-Fi range, 15+ clients, 24h battery.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <style>
+        :root{--p:#059669;--pd:#047857;--pl:#10b981;--pg:linear-gradient(135deg,#059669 0%,#10b981 50%,#34d399 100%);--td:#1a1a2e;--tb:#374151;--tl:#6b7280;--w:#ffffff;--bl:#f0fdf4;--bd:#d1fae5;--ss:0 1px 3px rgba(5,150,105,0.08);--sm:0 4px 20px rgba(5,150,105,0.12);--sl:0 10px 40px rgba(5,150,105,0.18);--sx:0 20px 60px rgba(5,150,105,0.22);--ts:0.5s cubic-bezier(0.25,0.46,0.45,0.94)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;color:var(--tb);line-height:1.7;background:var(--w);overflow-x:hidden}
+        body.menu-open{overflow:hidden}
+
+        /* Navbar */
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);height:72px}
+        .navbar.scrolled{box-shadow:var(--sm)}
+        .ncontainer{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:100%}
+        .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;z-index:1001}
+        .nlogo-icon{width:42px;height:42px;background:var(--pg);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px}
+        .nlogo-text{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:var(--td)}
+        .nlogo-text span{color:var(--p)}
+
+        /* Desktop Nav */
+        .nlinks{display:flex;align-items:center;gap:22px;list-style:none}
+        .nlinks a{text-decoration:none;color:var(--tb);font-weight:500;font-size:15px;position:relative;padding:6px 0;white-space:nowrap;cursor:pointer}
+        .nlinks a:hover{color:var(--p)}
+        .nlinks a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--p);transition:width var(--ts);border-radius:2px}
+        .nlinks a:hover::after{width:100%}
+        .ncta{background:var(--pg);color:white!important;padding:10px 22px;border-radius:50px;font-weight:600!important}
+        .ncta:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(5,150,105,0.4)}
+        .ncta::after{display:none!important}
+
+        /* Hamburger Button */
+        .hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;width:48px;height:48px;background:white;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;z-index:1001;padding:0;gap:5px;transition:all 0.3s}
+        .hamburger:hover{border-color:var(--p);background:#f0fdf4}
+        .hamburger span{display:block;width:24px;height:3px;background:var(--td);border-radius:3px;transition:all 0.3s ease;transform-origin:center}
+        .hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+        .hamburger.active span:nth-child(2){opacity:0;transform:scaleX(0)}
+        .hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+        .hamburger.active{border-color:var(--p);background:#f0fdf4}
+
+        /* Mobile Menu Overlay */
+        .mobile-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:998;opacity:0;transition:opacity 0.3s}
+        .mobile-overlay.show{display:block;opacity:1}
+
+        /* Mobile Menu Panel */
+        .mobile-menu{position:fixed;top:0;right:-320px;width:300px;max-width:85vw;height:100vh;background:white;z-index:999;padding:90px 24px 30px;overflow-y:auto;transition:right 0.4s cubic-bezier(0.4,0,0.2,1);box-shadow:-5px 0 30px rgba(0,0,0,0.2)}
+        .mobile-menu.open{right:0}
+        .mobile-menu ul{list-style:none}
+        .mobile-menu li{margin-bottom:4px;opacity:0;transform:translateX(20px);transition:all 0.3s ease}
+        .mobile-menu.open li{opacity:1;transform:translateX(0)}
+        .mobile-menu.open li:nth-child(1){transition-delay:0.08s}
+        .mobile-menu.open li:nth-child(2){transition-delay:0.14s}
+        .mobile-menu.open li:nth-child(3){transition-delay:0.20s}
+        .mobile-menu.open li:nth-child(4){transition-delay:0.26s}
+        .mobile-menu.open li:nth-child(5){transition-delay:0.32s}
+        .mobile-menu.open li:nth-child(6){transition-delay:0.38s}
+        .mobile-menu.open li:nth-child(7){transition-delay:0.44s}
+        .mobile-menu.open li:nth-child(8){transition-delay:0.50s}
+        .mobile-menu.open li:nth-child(9){transition-delay:0.56s}
+        .mobile-menu.open li:nth-child(10){transition-delay:0.62s}
+        .mobile-menu a{display:block;padding:14px 16px;font-size:16px;font-weight:500;color:var(--td);text-decoration:none;border-radius:10px;transition:all 0.2s}
+        .mobile-menu a:hover{background:var(--bl);color:var(--p);padding-left:22px}
+        .mobile-menu .mncta{display:block;text-align:center;background:var(--pg);color:white!important;padding:14px;border-radius:50px;font-weight:700;margin-top:12px}
+        .mobile-menu .mncta:hover{padding-left:14px;transform:scale(1.03)}
+
+        /* Hero */
+        .hero{min-height:100vh;display:flex;align-items:center;background:linear-gradient(180deg,#ffffff 0%,#f0fdf4 40%,#d1fae5 100%);padding-top:72px}
+        .hcontainer{max-width:1280px;margin:0 auto;padding:60px 24px;display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+        .hsub{display:block;font-size:14px;font-weight:500;color:var(--tl);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+        .hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.2);padding:8px 16px;border-radius:50px;font-size:13px;font-weight:600;color:var(--p);margin-bottom:24px}
+        .hbadge-dot{width:8px;height:8px;background:var(--p);border-radius:50%;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+        .hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,5vw,54px);font-weight:800;color:var(--td);line-height:1.1;margin-bottom:20px}
+        .hero h1 span{background:var(--pg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero p{font-size:17px;color:var(--tl);max-width:540px;margin-bottom:32px}
+        .hbtns{display:flex;gap:16px;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:50px;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all var(--ts)}
+        .btn-p{background:var(--pg);color:white;box-shadow:0 6px 24px rgba(5,150,105,0.35)}
+        .btn-p:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(5,150,105,0.5)}
+        .btn-o{background:transparent;color:var(--p);border:2px solid var(--p)}
+        .btn-o:hover{background:rgba(5,150,105,0.05);transform:translateY(-3px)}
+        .himg-ph{width:100%;max-width:500px;height:380px;background:linear-gradient(135deg,#064e3b,#047857,#059669);border-radius:24px;display:flex;align-items:center;justify-content:center;box-shadow:var(--sx)}
+        .himg-ph .dicon{font-size:110px;color:rgba(255,255,255,0.9)}
+        .himg-ph:hover .dicon{transform:scale(1.1);color:#34d399}
+        .hstats{display:flex;gap:30px;margin-top:36px}
+        .hstat{text-align:center}
+        .hstat-num{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--p)}
+        .hstat-label{font-size:12px;color:var(--tl);letter-spacing:1px;text-transform:uppercase}
+
+        /* Page Sections */
+        .page-section{display:none;padding:100px 24px}
+        .page-section.active{display:block}
+        #home-section{display:block;padding:0 24px}
+        .scontainer{max-width:1200px;margin:0 auto}
+        .sheader{text-align:center;margin-bottom:60px}
+        .stag{display:inline-block;font-size:13px;font-weight:600;color:var(--p);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+        .sheader h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(30px,4vw,42px);font-weight:700;color:var(--td);margin-bottom:16px}
+        .sheader p{font-size:17px;color:var(--tl);max-width:640px;margin:0 auto}
+        .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+        .g2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+        .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+        .g1-1{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+
+        /* Cards */
+        .pcard{background:white;border-radius:16px;padding:32px;text-align:center;border:1px solid #e5e7eb;cursor:default;transition:all var(--ts)}
+        .pcard:hover{transform:translateY(-6px);box-shadow:var(--sl);border-color:var(--bd)}
+        .picon{width:56px;height:56px;background:var(--bl);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--p);font-size:24px}
+        .pcard h4{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--td);margin-bottom:8px}
+        .pcard p{font-size:14px;color:var(--tl);line-height:1.6}
+        .fcard{background:white;border-radius:16px;padding:36px 28px;text-align:center;box-shadow:var(--ss);border:1px solid transparent;cursor:default;transition:all var(--ts)}
+        .fcard:hover{transform:translateY(-6px);box-shadow:var(--sl);border-color:var(--bd)}
+        .ficon-w{width:68px;height:68px;background:var(--pg);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:white;font-size:28px;box-shadow:0 8px 24px rgba(5,150,105,0.25)}
+        .fcard h4{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:var(--td);margin-bottom:8px}
+        .fcard p{font-size:14px;color:var(--tl)}
+        .acard{display:flex;gap:14px;padding:20px;background:var(--bl);border-radius:12px;cursor:default;transition:all var(--ts)}
+        .acard:hover{background:white;box-shadow:var(--sm);transform:translateY(-4px)}
+        .acheck{width:40px;height:40px;background:var(--p);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0;font-size:16px}
+        .acard h5{font-weight:600;font-size:15px;color:var(--td);margin-bottom:4px}
+        .acard p{font-size:13px;color:var(--tl)}
+        .mcard{background:white;border-radius:20px;padding:32px;border:2px solid #e5e7eb;cursor:default;transition:all var(--ts)}
+        .mcard:hover{transform:translateY(-6px);box-shadow:var(--sl)}
+        .mcard.featured{border-color:var(--p);box-shadow:var(--sm)}
+        .mbadge{display:inline-block;padding:6px 14px;border-radius:50px;font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:12px;background:#f3f4f6;color:#6b7280}
+        .mbadge.pop{background:#d1fae5;color:#059669}
+        .mcard h3{font-family:'Space Grotesk',sans-serif;font-size:24px;margin:8px 0 4px}
+        .mcard h3 span{color:var(--p)}
+        .mprice{font-size:28px;font-weight:800;color:var(--p);margin:12px 0}
+        .mdesc{font-size:13px;color:var(--tl)}
+        .apcard{background:white;border-radius:16px;padding:28px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.06);cursor:pointer;transition:all var(--ts)}
+        .apcard:hover{transform:translateY(-6px);box-shadow:var(--sl)}
+        .apicon{font-size:48px;margin-bottom:12px}
+        .apcard h4{font-weight:600;margin-bottom:6px}
+        .apcard p{font-size:13px;color:var(--tl);margin-bottom:14px}
+        .aplink{display:inline-block;background:var(--p);color:white;padding:10px 24px;border-radius:50px;text-decoration:none;font-weight:600;font-size:14px;transition:all var(--ts)}
+        .aplink:hover{background:var(--pd);transform:scale(1.05)}
+
+        /* Contact */
+        .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start;max-width:1100px;margin:0 auto}
+        .cinfo{background:#f9fafb;border-radius:24px;padding:40px;border:1px solid #e5e7eb}
+        .cinfo h3{font-family:'Space Grotesk',sans-serif;font-size:24px;color:var(--td);margin-bottom:8px}
+        .csub{color:var(--tl);font-size:14px;margin-bottom:30px}
+        .cdetail{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;padding:16px;border-radius:12px;background:white;border:1px solid transparent;transition:all var(--ts)}
+        .cdetail:hover{border-color:var(--bd);box-shadow:var(--ss);transform:translateX(4px)}
+        .cdicon{width:44px;height:44px;background:var(--bl);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--p);font-size:18px;flex-shrink:0;transition:all var(--ts)}
+        .cdetail:hover .cdicon{background:var(--p);color:white;transform:scale(1.1)}
+        .cdcontent h5{font-weight:600;font-size:15px;color:var(--td);margin-bottom:2px}
+        .cdcontent a,.cdcontent span{font-size:14px;color:var(--tl);text-decoration:none}
+        .cdcontent a:hover{color:var(--p);text-decoration:underline}
+        .csocial{display:flex;gap:12px;margin-top:24px}
+        .csocial a{width:42px;height:42px;background:white;border:1px solid #e5e7eb;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--tl);text-decoration:none;transition:all var(--ts)}
+        .csocial a:hover{background:var(--p);color:white;border-color:var(--p);transform:translateY(-3px)}
+        .ncard{background:linear-gradient(135deg,#f0fdf4 0%,#ffffff 100%);border-radius:24px;padding:40px;text-align:center;border:2px solid var(--bd);transition:all var(--ts)}
+        .ncard:hover{box-shadow:var(--sl);border-color:var(--pl)}
+        .nicon{font-size:56px;margin-bottom:16px}
+        .ncard h3{font-family:'Space Grotesk',sans-serif;font-size:24px;color:var(--td);margin-bottom:8px}
+        .ncard p{color:var(--tl);font-size:14px;margin-bottom:24px}
+        .nform{display:flex;flex-direction:column;gap:12px}
+        .nform input{width:100%;padding:14px 18px;border:2px solid #e5e7eb;border-radius:50px;font-size:15px;font-family:'Inter',sans-serif;background:white}
+        .nform input:focus{outline:none;border-color:var(--p)}
+        .nform button{width:100%;background:var(--pg);color:white;border:none;padding:14px;border-radius:50px;font-weight:600;font-size:15px;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(5,150,105,0.3);transition:all var(--ts)}
+        .nform button:hover{transform:translateY(-2px)}
+
+        /* Funding */
+        #funding-section{background:linear-gradient(180deg,#064e3b,#047857);color:white}
+        #funding-section .stag{color:#6ee7b7}
+        #funding-section h2{color:white}
+        #funding-section .sheader p{color:#a7f3d0}
+        .fund-amount{background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.25);padding:20px;border-radius:16px;display:inline-block;margin-bottom:20px}
+        .fund-amount .amt{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:#34d399;display:block}
+        .fund-amount .lbl{font-size:13px;color:#a7f3d0}
+        .fund-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:24px;padding:40px;text-align:center}
+        .ficon{font-size:56px;color:#34d399;margin-bottom:16px}
+        .fund-card h4{font-size:22px;margin-bottom:8px}
+        .fund-card p{color:#d1fae5;margin-bottom:20px;font-size:14px}
+        .btn-invest{background:#34d399;color:#064e3b;border:none;padding:16px 36px;border-radius:50px;font-weight:700;font-size:16px;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 8px 28px rgba(52,211,153,0.35);transition:all var(--ts)}
+        .btn-invest:hover{background:#6ee7b7;transform:translateY(-3px)}
+
+        /* Modal */
+        .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);z-index:2000;align-items:center;justify-content:center;padding:20px}
+        .modal-overlay.active{display:flex}
+        .modal{background:white;border-radius:24px;padding:36px;max-width:500px;width:100%;position:relative;max-height:90vh;overflow-y:auto}
+        .modal-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:#f3f4f6;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#6b7280}
+        .modal-close:hover{background:#e5e7eb}
+        .modal h3{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--td);margin-bottom:6px}
+        .modal-subtitle{color:var(--tl);font-size:14px;margin-bottom:22px}
+        .fgroup{margin-bottom:16px}
+        .fgroup label{display:block;font-size:13px;font-weight:600;color:var(--td);margin-bottom:6px}
+        .fgroup input,.fgroup select,.fgroup textarea{width:100%;padding:12px 16px;border:2px solid #e5e7eb;border-radius:8px;font-size:15px;font-family:'Inter',sans-serif;color:var(--td);background:#f9fafb}
+        .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{outline:none;border-color:var(--p);background:white}
+        .fgroup textarea{resize:vertical;min-height:80px}
+        .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+        .btn-submit{width:100%;background:var(--pg);color:white;font-weight:700;padding:14px;border-radius:50px;border:none;font-size:16px;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 6px 20px rgba(5,150,105,0.3);margin-top:8px;transition:all var(--ts)}
+        .btn-submit:hover{transform:translateY(-2px)}
+
+        /* Footer */
+        footer{background:#064e3b;color:#d1fae5;padding:60px 24px 30px}
+        .fcontainer{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+        .fbrand .nav-logo{margin-bottom:12px}
+        .fbrand .nlogo-text{color:white}
+        .fbrand p{font-size:14px;color:#a7f3d0;margin-bottom:16px}
+        .fsocial{display:flex;gap:12px}
+        .fsocial a{width:36px;height:36px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#d1fae5;text-decoration:none;transition:all var(--ts)}
+        .fsocial a:hover{background:#34d399;color:#064e3b;transform:translateY(-3px)}
+        footer h5{color:white;font-weight:600;margin-bottom:16px;font-size:15px}
+        footer ul{list-style:none}
+        footer ul li{margin-bottom:10px}
+        footer ul a{color:#a7f3d0;text-decoration:none;font-size:14px;cursor:pointer;transition:all 0.2s}
+        footer ul a:hover{color:#34d399;padding-left:4px}
+        .fbottom{max-width:1200px;margin:40px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,0.15);text-align:center;font-size:13px;color:#a7f3d0}
+
+        /* Ad */
+        .adwrap{max-width:1200px;margin:40px auto;padding:0 24px}
+        .adbox{background:#f9fafb;border-radius:16px;padding:16px;text-align:center;border:1px dashed #d1d5db;min-height:90px;display:flex;align-items:center;justify-content:center}
+        .adlabel{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px}
+
+        /* Responsive */
+        @media(max-width:1024px){
+            .hcontainer{grid-template-columns:1fr;text-align:center}
+            .hero p{margin:0 auto 32px;max-width:100%}
+            .hbtns{justify-content:center}
+            .hstats{justify-content:center;flex-wrap:wrap}
+            .himg-ph{max-width:340px;margin:0 auto;height:280px}
+            .fcontainer{grid-template-columns:1fr 1fr}
+            .cgrid{grid-template-columns:1fr}
+            .g3{grid-template-columns:repeat(2,1fr)}
+            .g4{grid-template-columns:repeat(2,1fr)}
+            .g1-1{grid-template-columns:1fr}
+        }
+        @media(max-width:768px){
+            /* Hide desktop nav, show hamburger */
+            .nlinks{display:none}
+            .hamburger{display:flex}
+            
+            .hero{min-height:auto;padding-top:90px}
+            .hero h1{font-size:28px}
+            .hero p{font-size:15px}
+            .himg-ph{height:220px;max-width:280px}
+            .himg-ph .dicon{font-size:70px}
+            .hstats{gap:16px}
+            .hstat-num{font-size:20px}
+            .hbtns{flex-direction:column;align-items:center;gap:12px}
+            .hbtns .btn{width:100%;justify-content:center}
+            .page-section{padding:60px 16px!important}
+            .sheader h2{font-size:26px}
+            .g3{grid-template-columns:1fr}
+            .g2{grid-template-columns:1fr}
+            .g4{grid-template-columns:repeat(2,1fr)}
+            .g1-1{grid-template-columns:1fr}
+            .cgrid{grid-template-columns:1fr;gap:30px}
+            .fcontainer{grid-template-columns:1fr;gap:30px;text-align:center}
+            .frow{grid-template-columns:1fr}
+            .modal{padding:24px 20px;margin:16px;max-width:100%;border-radius:20px}
+            .stag {margin-top: 30px;}
+        }
+        @media(max-width:480px){
+            .hero h1{font-size:24px}
+            .himg-ph{height:180px;max-width:240px}
+            .himg-ph .dicon{font-size:50px}
+            .hstat-num{font-size:18px}
+            .sheader h2{font-size:22px}
+            .g4{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="ncontainer">
+            <a href="#" class="nav-logo" id="logoHome">
+                <div class="nlogo-icon"><i class="fas fa-wifi"></i></div>
+                <div class="nlogo-text">Sim<span>Hub</span></div>
+            </a>
+            
+            <!-- Desktop Nav Links -->
+            <ul class="nlinks" id="nlinks">
+                <li><a href="#home" onclick="navigateTo('home')">Home</a></li>
+                <li><a href="#problem" onclick="navigateTo('problem')">Problem</a></li>
+                <li><a href="#solution" onclick="navigateTo('solution')">Solution</a></li>
+                <li><a href="#advantages" onclick="navigateTo('advantages')">Advantages</a></li>
+                <li><a href="#specs" onclick="navigateTo('specs')">Models</a></li>
+                <!----<li><a href="#accessories" onclick="navigateTo('accessories')">Shop</a></li>
+                <li><a href="#courses" onclick="navigateTo('courses')">Learn</a></li>
+                <li><a href="#partners" onclick="navigateTo('partners')">Partners</a></li>------hide----->
+                <li><a href="#contact" onclick="navigateTo('contact')">Contact</a></li>
+                <li><a href="#funding" onclick="navigateTo('funding')" class="ncta">Invest</a></li>
+            </ul>
+            
+            <!-- Hamburger Button (Mobile Only) -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#home" onclick="navigateTo('home')"><i class="fas fa-home" style="width:22px;margin-right:8px;"></i>Home</a></li>
+            <li><a href="#problem" onclick="navigateTo('problem')"><i class="fas fa-exclamation-triangle" style="width:22px;margin-right:8px;"></i>Problem</a></li>
+            <li><a href="#solution" onclick="navigateTo('solution')"><i class="fas fa-lightbulb" style="width:22px;margin-right:8px;"></i>Solution</a></li>
+            <li><a href="#advantages" onclick="navigateTo('advantages')"><i class="fas fa-trophy" style="width:22px;margin-right:8px;"></i>Advantages</a></li>
+            <li><a href="#specs" onclick="navigateTo('specs')"><i class="fas fa-microchip" style="width:22px;margin-right:8px;"></i>Models</a></li>
+            <!-----<li><a href="#accessories" onclick="navigateTo('accessories')"><i class="fas fa-shopping-bag" style="width:22px;margin-right:8px;"></i>Shop</a></li>
+            <li><a href="#courses" onclick="navigateTo('courses')"><i class="fas fa-graduation-cap" style="width:22px;margin-right:8px;"></i>Learn</a></li>
+            <li><a href="#partners" onclick="navigateTo('partners')"><i class="fas fa-handshake" style="width:22px;margin-right:8px;"></i>Partners</a></li>-------hide ------>
+            <li><a href="#contact" onclick="navigateTo('contact')"><i class="fas fa-envelope" style="width:22px;margin-right:8px;"></i>Contact</a></li>
+            <li><a href="#funding" onclick="navigateTo('funding')" class="mncta"><i class="fas fa-hand-holding-usd" style="margin-right:6px;"></i>Invest Now</a></li>
+        </ul>
+    </div>
+
+    <!-- ==================== HOME SECTION ==================== -->
+    <section class="hero page-section active" id="home-section">
+        <div class="hcontainer">
+            <div>
+                <span class="hsub">A Division of GetCAD Technologies Ltd</span>
+                <div class="hbadge"><span class="hbadge-dot"></span>Pre-Seed — Seeking Strategic Partners</div>
+                <h1>Connectivity That <span>Never Drops</span></h1>
+                <p>SimHub is Africa's first intelligent multi-SIM MiFi device. Seamlessly switch between networks, extend Wi-Fi to 150 metres, manage calls and SMS from both SIMs, and host up to 15 devices — all from one powerful device. <strong>Built in Zambia. Engineered for Africa.</strong></p>
+                <div class="hbtns">
+                    <button class="btn btn-p" onclick="navigateTo('funding')"><i class="fas fa-hand-holding-usd"></i>Become a Funder</button>
+                    <button class="btn btn-o" onclick="navigateTo('solution')"><i class="fas fa-arrow-down"></i>Discover SimHub</button>
+                </div>
+                <div class="hstats">
+                    <div class="hstat"><div class="hstat-num">15+</div><div class="hstat-label">Clients</div></div>
+                    <div class="hstat"><div class="hstat-num">150m</div><div class="hstat-label">Range</div></div>
+                    <div class="hstat"><div class="hstat-num">2x</div><div class="hstat-label">Dual SIM</div></div>
+                    <div class="hstat"><div class="hstat-num">24h</div><div class="hstat-label">Battery</div></div>
+                </div>
+            </div>
+            <div class="himg-ph"><span class="dicon">📡</span></div>
+        </div>
+    </section>
+
+    <!-- ==================== PROBLEM SECTION ==================== -->
+    <section class="page-section" id="problem-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">The Problem</span><h2 class="card-intro" style="color:#047857">Why SimHub Was Born</h2><p>Millions of African professionals face daily connectivity battles. Network outages, physical SIM swapping, limited hotspot range, and fragmented communications are accepted norms — but they shouldn't be.</p></div>
+            <div class="g3" data-aos="fade-up">
+                <div class="pcard"><div class="picon"><i class="fas fa-signal"></i></div><h4>Unreliable Single Networks</h4><p>One carrier means every tower outage or congestion event stops your work cold.</p>
+                    <br><p>The fundamental flaw in modern mobile connectivity is its singular point of failure. When you rely on one mobile network operator for your internet access, you are essentially placing your entire digital life in the hands of a single 
+                    infrastructure provider. Network towers go down during power outages — a disturbingly frequent occurrence in many African cities. Fibre cables get damaged during road construction. Unexpected maintenance windows knock out service for hours without warning. And during peak usage periods, 
+                    network congestion reduces speeds to unusable levels.</p></div>
+                <div class="pcard"><div class="picon"><i class="fas fa-sim-card"></i></div><h4>Physical SIM Swapping Hassle</h4><p>Physically ejecting SIMs damages trays and interrupts active connections.</p>
+                    <br><p>Anyone who has managed multiple SIM cards knows the ritual intimately: power down the device, locate the SIM ejector tool (which is never where you last left it), carefully remove the delicate tray without damaging the pins, 
+                       swap the tiny plastic card, reinsert the tray, power back on, and wait for network registration. This process, which takes anywhere from two to five minutes, is not merely an inconvenience — it is a fundamental design failure in how we interact with mobile networks.</p></div>
+                <div class="pcard"><div class="picon"><i class="fas fa-wifi"></i></div><h4>Limited Hotspot Range</h4><p>Phone hotspots die in 3 hours and barely cover a single room.</p>
+                    <br><p>The smartphone in your pocket is a technological marvel, but it was never designed to serve as a dedicated internet gateway for multiple devices. When you enable the personal hotspot feature on your phone, you immediately encounter its limitations. The Wi-Fi radio in a smartphone is optimized for battery 
+                        efficiency, not transmission power — resulting in effective ranges of perhaps ten to fifteen meters indoors before signal degradation becomes noticeable. Connect more than three or four devices, and performance deteriorates rapidly as the phone's processor struggles to manage packet routing, network address translation, 
+                        and cellular data simultaneously.</p></div>
+                <div class="pcard"><div class="picon"><i class="fas fa-dollar-sign"></i></div><h4>Opaque Data Costs</h4><p>Without visibility into rates, users overspend on data across carriers.</p>
+                    <br><p>Mobile network operators across Africa offer a dizzying array of data bundles, promotional offers, and time-limited deals that vary not only between carriers but often between different regions of the same country. Without real-time visibility into which SIM card offers the most cost-effective data rate at any given moment, 
+                        consumers routinely overpay for internet access. The problem is compounded for those managing multiple SIMs — keeping track of remaining data balances, expiry dates, and fair usage policies across different accounts becomes a cognitive burden that most users simply abandon, defaulting to whichever SIM happens to be in their phone.</p></div>
+                <div class="pcard"><div class="picon"><i class="fas fa-phone-slash"></i></div><h4>Fragmented Communications Channels</h4><p>Managing two SIMs means missed calls on your secondary number.</p>
+                    <p>The modern professional juggles an increasingly complex web of communication channels. Personal calls come through one number. Business inquiries arrive on another. SMS verification codes for banking and government services might be registered to either SIM. WhatsApp messages, Telegram notifications, email alerts, and social media 
+                        direct messages each demand attention through different applications. The result is communication fragmentation — a state of constant context-switching that reduces productivity and increases the likelihood of missing important messages entirely.</p></div>
+                <div class="pcard"><div class="picon"><i class="fas fa-battery-quarter"></i></div><h4>Battery Anxiety</h4><p>Using your phone as hotspot drains it — forcing impossible choices.</p>
+                    <br><p>Using your primary smartphone as a mobile hotspot creates an impossible trade-off between connectivity and communication. The combination of cellular data transmission, Wi-Fi broadcasting, and screen usage drains a typical smartphone battery from full to empty in approximately three to four hours of hotspot use. 
+                        This leaves users with a devastating choice: stay connected to the internet or preserve battery life for essential phone calls and messages.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SOLUTION SECTION ==================== -->
+    <section class="page-section" id="solution-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">Our Innovation</span><h2>Introducing SimHub</h2><p>A revolutionary multi-SIM MiFi device with intelligent network switching, extended range, and a companion app that puts complete connectivity control in your hands.</p></div>
+            <div class="g3" data-aos="fade-up">
+                <div class="fcard"><div class="ficon-w"><i class="fas fa-sim-card"></i></div><h4>Dual SIM Intelligence</h4><p>Automatic network switching based on signal strength, speed, and cost.</p></div>
+                <div class="fcard"><div class="ficon-w"><i class="fas fa-wifi"></i></div><h4>Extended Wi-Fi Range</h4><p>150-metre outdoor range with external antenna support for 15 clients.</p></div>
+                <div class="fcard"><div class="ficon-w"><i class="fas fa-mobile-alt"></i></div><h4>SimHub Connect App</h4><p>Manage calls, SMS, contacts, and hotspot from one beautiful interface.</p></div>
+                <div class="fcard"><div class="ficon-w"><i class="fas fa-phone-volume"></i></div><h4>Smart VoIP Calls</h4><p>Conference calls with 25 participants, video calls with 10.</p></div>
+                <div class="fcard"><div class="ficon-w"><i class="fas fa-shield-alt"></i></div><h4>Granular Access Control</h4><p>Free, passkey-protected, or individually approved connections with time limits.</p></div>
+                <div class="fcard"><div class="ficon-w"><i class="fas fa-battery-full"></i></div><h4>All-Day Battery Life</h4><p>24-hour continuous operation with intelligent power management.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ADVANTAGES SECTION ==================== -->
+    <section class="page-section" id="advantages-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">Competitive Edge</span><h2>Why SimHub Wins</h2><p>True network redundancy. Cost optimisation. Unified communications. African-first engineering. Enterprise features at consumer prices.</p></div>
+            <div class="g3" data-aos="fade-up">
+                <div class="acard"><div class="acheck"><i class="fas fa-check"></i></div><div><h5>Network Redundancy</h5><p>Automatic failover between SIMs ensures zero downtime.</p></div></div>
+                <div class="acard"><div class="acheck"><i class="fas fa-check"></i></div><div><h5>Cost Optimisation</h5><p>Routes data through the most cost-effective SIM automatically.</p></div></div>
+                <div class="acard"><div class="acheck"><i class="fas fa-check"></i></div><div><h5>Unified Communication</h5><p>All calls and SMS from both SIMs in one app.</p></div></div>
+                <div class="acard"><div class="acheck"><i class="fas fa-check"></i></div><div><h5>African-First Design</h5><p>Built for African conditions — heat-resistant, voltage-tolerant.</p></div></div>
+                <div class="acard"><div class="acheck"><i class="fas fa-check"></i></div><div><h5>Local Manufacturing</h5><p>Assembled in Lusaka, Zambia — creating skilled jobs.</p></div></div>
+                <div class="acard"><div class="acheck"><i class="fas fa-check"></i></div><div><h5>Enterprise Ready</h5><p>VPN, VLANs, captive portal — enterprise networking at consumer prices.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SPECS SECTION ==================== -->
+    <section class="page-section" id="specs-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">Model Lineup</span><h2>Choose Your SimHub</h2><p>From personal to enterprise — four models for different needs, one standard of excellence.</p></div>
+            <div class="g2" data-aos="fade-up">
+                <div class="mcard"><span class="mbadge">PERSONAL</span><h3>SimHub <span>Lite</span></h3><p style="color:#6b7280;font-size:14px;">8 clients • 100m • 18h</p><div class="mprice">$89</div><p class="mdesc">For students and individuals needing reliable dual-SIM backup.</p></div>
+                <div class="mcard featured"><span class="mbadge pop">BEST SELLER</span><h3>SimHub <span>Lite Pro</span></h3><p style="color:#6b7280;font-size:14px;">15 clients • 200m • 24h</p><div class="mprice">$149</div><p class="mdesc">For professionals, families, and remote workers.</p></div>
+                <div class="mcard"><span class="mbadge">ENTERPRISE</span><h3>SimHub <span>Enterprise 1</span></h3><p style="color:#6b7280;font-size:14px;">50 clients • 500m • 4G</p><div class="mprice">$349</div><p class="mdesc">For small businesses and remote offices.</p></div>
+                <div class="mcard"><span class="mbadge">ENTERPRISE PRO</span><h3>SimHub <span>Enterprise Pro</span></h3><p style="color:#6b7280;font-size:14px;">100 clients • 800m • Cat 6</p><div class="mprice">$699</div><p class="mdesc">For hotels, schools, hospitals, and large organisations.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ACCESSORIES SECTION ==================== -->
+    <section class="page-section" id="accessories-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">RECOMMENDED GEAR</span><h2>Essential Accessories</h2><p>Tested with SimHub. Purchases through our links support our work.</p></div>
+            <div class="g3" data-aos="fade-up">
+                <div class="apcard"><div class="apicon">🔋</div><h4>Power Bank</h4><p>20,000mAh for days of use</p><a href="#" class="aplink" onclick="trackClick('powerBank','anker');return false">Amazon →</a></div>
+                <div class="apcard"><div class="apicon">📶</div><h4>Wi-Fi Antenna</h4><p>7dBi — boost range by 50%</p><a href="#" class="aplink" onclick="trackClick('antenna','alfa');return false">Amazon →</a></div>
+                <div class="apcard"><div class="apicon">🌍</div><h4>International eSIM</h4><p>Data in 190+ countries</p><a href="#" class="aplink" onclick="trackClick('esim','airalo');return false">Get $3 Off →</a></div>
+                <div class="apcard"><div class="apicon">💼</div><h4>Carrying Case</h4><p>Shockproof protection</p><a href="#" class="aplink" onclick="trackClick('case','simhub');return false">Amazon →</a></div>
+                <div class="apcard"><div class="apicon">🔌</div><h4>Fast Charger</h4><p>65W GaN — 2 hour charge</p><a href="#" class="aplink" onclick="trackClick('charger','gan');return false">Amazon →</a></div>
+                <div class="apcard"><div class="apicon">📱</div><h4>Mount Bracket</h4><p>Wall or vehicle mount</p><a href="#" class="aplink" onclick="trackClick('mount','bracket');return false">Amazon →</a></div>
+            </div>
+            <p style="text-align:center;margin-top:20px;font-size:12px;color:#9ca3af;">As an affiliate, we earn from qualifying purchases.</p>
+        </div>
+    </section>
+
+    <!-- ==================== COURSES SECTION ==================== -->
+    <section class="page-section" id="courses-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">LEARN & GROW</span><h2>Master Mobile Connectivity</h2><p>Online courses and live webinars for maximum value from your setup.</p></div>
+            <div class="ccard g1-1" data-aos="fade-up" style="display:grid;background:white;border-radius:16px;padding:36px;box-shadow:0 2px 10px rgba(0,0,0,0.08);">
+                <div>
+                    <span style="background:#d1fae5;color:#059669;padding:6px 14px;border-radius:50px;font-size:12px;font-weight:700;">FREE WEBINAR</span>
+                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;margin:16px 0;">Never Lose Internet in Africa</h3>
+                    <p style="color:#6b7280;margin-bottom:16px;">60-minute session: multi-network strategies, data cost optimisation, live demo.</p>
+                    <button class="btn btn-p" onclick="openModal()">Reserve Your Spot →</button>
+                </div>
+                <div style="background:#f0fdf4;border-radius:16px;padding:36px;text-align:center;">
+                    <div style="font-size:50px;">🎓</div>
+                    <div style="font-weight:600;">Every Wednesday</div>
+                    <div style="font-size:22px;font-weight:700;color:#059669;">3PM CAT / 1PM GMT</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PARTNERS SECTION ==================== -->
+    <section class="page-section" id="partners-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">OUR ECOSYSTEM</span><h2>Trusted Partners</h2><p>Collaborating with leading technology and telecom companies across Africa.</p></div>
+            <div class="g4" data-aos="fade-up" style="text-align:center;">
+                <div class="ccard" style="padding:28px;"><div style="font-size:40px;">🏢</div><h5 style="font-weight:600;">MTN Zambia</h5><p style="font-size:12px;color:#6b7280;">Network Partner</p></div>
+                <div class="ccard" style="padding:28px;"><div style="font-size:40px;">🏗️</div><h5 style="font-weight:600;">Airtel Africa</h5><p style="font-size:12px;color:#6b7280;">Connectivity</p></div>
+                <div class="ccard" style="padding:28px;"><div style="font-size:40px;">💻</div><h5 style="font-weight:600;">Liquid Telecom</h5><p style="font-size:12px;color:#6b7280;">Infrastructure</p></div>
+                <div class="ccard" style="padding:28px;"><div style="font-size:40px;">🔧</div><h5 style="font-weight:600;">ZICTA</h5><p style="font-size:12px;color:#6b7280;">Regulatory</p></div>
+            </div>
+            <div style="text-align:center;margin-top:36px;"><p style="color:#6b7280;margin-bottom:16px;">Interested in partnering?</p><button class="btn btn-p" onclick="navigateTo('contact')">Become a Partner →</button></div>
+        </div>
+    </section>
+
+    <!-- ==================== AD UNIT ==================== -->
+    <div class="adwrap"><div class="adbox"><div><span class="adlabel">Advertisement</span><ins class="adsbygoogle" style="display:block;min-height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div></div></div>
+
+    <!-- ==================== CONTACT SECTION ==================== -->
+    <section class="page-section" id="contact-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">GET IN TOUCH</span><h2>Contact SimHub</h2><p>Reach out for partnerships, pre-orders, or investment opportunities.</p></div>
+            <div class="cgrid" data-aos="fade-up">
+                <div class="cinfo">
+                    <h3>Our Office</h3><p class="csub">A Division of GetCAD Technologies Ltd</p>
+                    <div class="cdetail"><div class="cdicon"><i class="fas fa-map-marker-alt"></i></div><div class="cdcontent"><h5>Address</h5><span>Plot 1234, Great East Road, Lusaka</span></div></div>
+                    <div class="cdetail"><div class="cdicon"><i class="fas fa-phone"></i></div><div class="cdcontent"><h5>Phone</h5><a href="tel:+260973388699">+260 973 388 699</a>
+                        <p><a href="tel:+260764569476">+260 764 569 476</a></div></div></p>
+                    <div class="cdetail"><div class="cdicon"><i class="fas fa-envelope"></i></div><div class="cdcontent"><h5>Email</h5><a href="robertngambi808@gmail.com">robertngambi808@gmail.com</a>
+                        <p><a href="simhubqueries@gmail.com">simhubqueries@gmail.com</a></div></div></p>
+                    <div class="csocial"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div></div>
+                <div class="ncard">
+                    <div class="nicon">📬</div><h3>Stay Updated</h3><p>Join our Newsletter and get product updates and exclusive offers.</p>
+                    <form class="nform" id="newsletterForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                        <input type="text" name="fullName" placeholder="Your name" required>
+                        <input type="email" name="email" placeholder="Your email" required>
+                        <input type="text" name="phone" placeholder="Your Phone" required>
+                        <input type="hidden" name="_subject" value="New SimHub Newsletter Subscriber">
+                        <button type="submit">Subscribe Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FUNDING SECTION ==================== -->
+    <section class="page-section" id="funding-section">
+        <div class="scontainer">
+            <div class="sheader" data-aos="fade-up"><span class="stag">INVESTMENT</span><h2>Join Us in Building Africa's Connectivity Future</h2><p>Pre-seed stage with working prototype. Seeking up to $600,000 for local manufacturing in Lusaka.</p></div>
+            <div class="g1-1" data-aos="fade-up" style="display:grid;">
+                <div>
+                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;margin-bottom:16px;">Why Invest?</h3>
+                    <p style="color:#d1fae5;margin-bottom:20px;">Africa's mobile hotspot market is projected to exceed $8 billion by 2030. SimHub has first-mover advantage.</p>
+                    <ul style="list-style:none;margin-bottom:24px;">
+                        <li style="display:flex;gap:10px;margin-bottom:10px;color:#d1fae5;"><i class="fas fa-check-circle" style="color:#34d399;"></i>Working prototype tested across Zambian networks</li>
+                        <li style="display:flex;gap:10px;margin-bottom:10px;color:#d1fae5;"><i class="fas fa-check-circle" style="color:#34d399;"></i>500M+ addressable subscribers in target markets</li>
+                        <li style="display:flex;gap:10px;margin-bottom:10px;color:#d1fae5;"><i class="fas fa-check-circle" style="color:#34d399;"></i>Proprietary SIM management software</li>
+                    </ul>
+                    <div class="fund-amount"><span class="amt">Up to $600,000</span><span class="lbl">Pre-Seed — Lusaka Manufacturing</span></div>
+                </div>
+                <div class="fund-card">
+                    <div class="ficon"><i class="fas fa-handshake"></i></div>
+                    <h4>Become a Funder</h4>
+                    <p>Complete the form and we'll respond within 24 hours.</p>
+                    <button class="btn-invest" onclick="openModal()">Start the Conversation →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA SECTION ==================== -->
+    <section class="page-section" id="cta-section" style="background:linear-gradient(180deg,#f0fdf4,#ffffff);">
+        <div class="scontainer" style="text-align:center;" data-aos="fade-up">
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:34px;margin-bottom:16px;">Ready to Transform African Connectivity?</h2>
+            <p style="color:#6b7280;margin-bottom:24px;">Investors, distributors, partners — let's build the future together.</p>
+            <button class="btn btn-p" onclick="navigateTo('funding')" style="font-size:17px;padding:16px 36px;"><i class="fas fa-hand-holding-usd"></i>Invest in SimHub Today</button>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="fcontainer">
+            <div class="fbrand">
+                <a href="#" class="nav-logo" onclick="navigateTo('home')"><div class="nlogo-icon"><i class="fas fa-wifi"></i></div><div class="nlogo-text">Sim<span>Hub</span></div></a>
+                <p>A division of <strong>GetCAD Technologies Ltd</strong><br>Revolutionising connectivity across Africa. Designed and built in Lusaka, Zambia.</p>
+                <div class="fsocial"><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a></div>
+            </div>
+            <div><h5>Product</h5><ul><li><a onclick="navigateTo('specs')">Specifications</a></li><li><a onclick="navigateTo('solution')">Features</a></li><li><a onclick="navigateTo('advantages')">Advantages</a></li></ul></div>
+            <div><h5>Company</h5><ul><li><a onclick="navigateTo('contact')">Contact</a></li><li><a onclick="navigateTo('funding')">Investment</a></li><li><a onclick="navigateTo('partners')">Partners</a></li></ul></div>
+            <div><h5>Legal</h5><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Patents Pending</a></li></ul></div>
+        </div>
+        <div class="fbottom"><p>&copy; 2025 SimHub — A Division of GetCAD Technologies Ltd. | Lusaka, Zambia</p></div>
+    </footer>
+
+    <!-- ==================== FUNDING MODAL ==================== -->
+    <div class="modal-overlay" id="fundingModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <h3>Fund SimHub</h3><p class="modal-subtitle">We'll respond within 24 hours with our pitch deck.</p>
+            <form id="fundingForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <div class="frow"><div class="fgroup"><label>First Name</label><input type="text" name="firstName" required></div><div class="fgroup"><label>Last Name</label><input type="text" name="lastName" required></div></div>
+                <div class="fgroup"><label>Email</label><input type="email" name="email" required></div>
+                <div class="fgroup"><label>Phone</label><input type="tel" name="phone"></div>
+                <div class="fgroup"><label>Company/ Organisation</label><input type="text" name="organisation"></div>
+                <div class="fgroup"><label>Interest</label><select name="interestType"><option>Equity</option><option>Grant</option><option>Loan</option><option>VC</option><option>Angel</option></select></div>
+                <div class="fgroup"><label>Message</label><textarea name="message"></textarea></div>
+                <input type="hidden" name="_subject" value="New SimHub Funding Interest">
+                <button type="submit" class="btn-submit">Submit Interest</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 700, easing: 'ease-out', once: true, offset: 80 });
+
+        // ==================== NAVIGATION ====================
+        function navigateTo(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(function(s) {
+                s.style.display = 'none';
+                s.classList.remove('active');
+            });
+            
+            // Show target
+            var target = document.getElementById(sectionName + '-section');
+            if (target) {
+                target.style.display = 'block';
+                target.classList.add('active');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(function() { AOS.refresh(); }, 300);
+            
+            // Close mobile menu
+            closeMobileMenu();
+            
+            // Update URL
+            if (window.location.hash !== '#' + sectionName) {
+                history.pushState(null, null, '#' + sectionName);
+            }
+        }
+
+        // ==================== MOBILE MENU ====================
+        var hamburger = document.getElementById('hamburgerBtn');
+        var mobileMenu = document.getElementById('mobileMenu');
+        var overlay = document.getElementById('mobileOverlay');
+        var isMenuOpen = false;
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            overlay.classList.add('show');
+            hamburger.classList.add('active');
+            document.body.classList.add('menu-open');
+            isMenuOpen = true;
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            overlay.classList.remove('show');
+            hamburger.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            isMenuOpen = false;
+        }
+
+        function toggleMobileMenu() {
+            if (isMenuOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        }
+
+        // Hamburger click
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
+
+        // Overlay click closes menu
+        overlay.addEventListener('click', function() {
+            closeMobileMenu();
+        });
+
+        // Close on escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+
+        // Close on window resize to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && isMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+
+        // ==================== INITIAL LOAD ====================
+        window.addEventListener('load', function() {
+            var hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(hash + '-section')) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+
+        // Browser back/forward
+        window.addEventListener('popstate', function() {
+            var hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(hash + '-section')) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+
+        // ==================== NAVBAR SCROLL ====================
+        window.addEventListener('scroll', function() {
+            var nav = document.getElementById('navbar');
+            if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ==================== MODAL ====================
+        function openModal() {
+            document.getElementById('fundingModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            document.getElementById('fundingModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('fundingModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ==================== AFFILIATE ====================
+        var AFF = { powerBank: { anker: '#' }, antenna: { alfa: '#' }, esim: { airalo: '#' }, case: { simhub: '#' }, charger: { gan: '#' }, mount: { bracket: '#' } };
+        function trackClick(cat, prod) {
+            var link = (AFF[cat] && AFF[cat][prod]) ? AFF[cat][prod] : '#';
+            window.open(link, '_blank');
+        }
+
+        console.log('✅ SimHub website ready — Hamburger menu active');
+    </script>
+</body>
+</html>
